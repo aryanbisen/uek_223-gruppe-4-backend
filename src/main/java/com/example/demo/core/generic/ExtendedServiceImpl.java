@@ -52,7 +52,7 @@ public abstract class ExtendedServiceImpl<T extends ExtendedEntity> implements E
   @Override
   public List<T> findAll(Pageable pageable) {
     Page<T> pagedResult = repository.findAll(pageable);
-    return pagedResult.hasContent() ? pagedResult.getContent() : new ArrayList<T>();
+    return pagedResult.hasContent() ? pagedResult.getContent() : new ArrayList<>();
   }
 
   @Override

@@ -6,10 +6,7 @@ import java.util.Map;
 
 public class ResponseError implements Serializable {
   private LocalDate timeStamp;
-  private Map<String, Object> errors;
-
-  public ResponseError() {
-  }
+  private Map<String, String> errors;
 
   public LocalDate getTimeStamp() {
     return timeStamp;
@@ -20,11 +17,11 @@ public class ResponseError implements Serializable {
     return this;
   }
 
-  public Map<String, Object> getErrors() {
+  public Map<String, String> getErrors() {
     return errors;
   }
 
-  public ResponseError setErrors(Map<String, Object> errors) {
+  public ResponseError setErrors(Map<String, String> errors) {
     this.errors = errors;
     return this;
   }

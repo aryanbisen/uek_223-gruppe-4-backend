@@ -18,6 +18,7 @@ public class CustomGlobalExceptionHandler {
 
   //May be used for further ExceptionHandlers
   //messageSource.getMessage("errors.exception.message", null, LocaleContextHolder.getLocale())
+  @SuppressWarnings("java:S1068")
   private MessageSource messageSource;
 
   @Autowired
