@@ -3,18 +3,17 @@ package com.example.demo.core.generic;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public abstract class ExtendedServiceImpl<T extends ExtendedEntity> implements ExtendedService<T> {
+public abstract class AbstractServiceImpl<T extends AbstractEntity> implements AbstractService<T> {
 
-  protected final ExtendedRepository<T> repository;
+  protected final AbstractRepository<T> repository;
   protected final Logger logger;
 
-  protected ExtendedServiceImpl(ExtendedRepository<T> repository, Logger logger) {
+  protected AbstractServiceImpl(AbstractRepository<T> repository, Logger logger) {
     this.repository = repository;
     this.logger = logger;
   }
@@ -25,13 +24,12 @@ public abstract class ExtendedServiceImpl<T extends ExtendedEntity> implements E
   }
 
   @Override
-  public Void deleteById(UUID id) throws NoSuchElementException {
+  public void deleteById(UUID id) throws NoSuchElementException {
     if (repository.existsById(id)) {
       repository.deleteById(id);
     } else {
       throw new NoSuchElementException(String.format("Entity with ID '%s' could not be found", id));
     }
-    return null;
   }
 
   @Override
@@ -57,7 +55,7 @@ public abstract class ExtendedServiceImpl<T extends ExtendedEntity> implements E
 
   @Override
   public T findById(UUID id) {
-    return findOrThrow(repository.findById(id));
+    return repository.findById(id).orElseThrow(NoSuchElementException::new);
   }
 
   @Override
@@ -65,13 +63,5 @@ public abstract class ExtendedServiceImpl<T extends ExtendedEntity> implements E
     return repository.existsById(id);
   }
 
-  @Override
-  public T findOrThrow(Optional<T> optional) throws NoSuchElementException {
-    if (optional.isPresent()) {
-      return optional.get();
-    } else {
-      throw new NoSuchElementException("No value present");
-    }
-  }
 
 }

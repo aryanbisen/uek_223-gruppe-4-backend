@@ -1,10 +1,10 @@
 package com.example.demo.domain.user.dto;
 
-import com.example.demo.core.generic.ExtendedDTO;
+import com.example.demo.core.generic.AbstractDTO;
 import java.util.UUID;
 import javax.validation.constraints.Email;
 
-public class UserRegisterDTO extends ExtendedDTO {
+public class UserRegisterDTO extends AbstractDTO {
 
   private String firstName;
 

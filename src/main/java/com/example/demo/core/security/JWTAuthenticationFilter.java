@@ -28,8 +28,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-  private final JwtProperties jwtProperties;
   private static final Logger JWT_LOGGER = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
+  private final JwtProperties jwtProperties;
 
 
   public JWTAuthenticationFilter(RequestMatcher requestMatcher, AuthenticationManager authenticationManager,
@@ -54,7 +54,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-      throws AuthenticationException, IOException {
+      throws AuthenticationException {
     try {
       Credentials credentials = new ObjectMapper().readValue(request.getInputStream(), Credentials.class);
       return getAuthenticationManager().authenticate(

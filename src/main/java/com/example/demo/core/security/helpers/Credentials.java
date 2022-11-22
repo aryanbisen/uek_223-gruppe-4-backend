@@ -1,5 +1,8 @@
 package com.example.demo.core.security.helpers;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class Credentials {
 
   private String email;

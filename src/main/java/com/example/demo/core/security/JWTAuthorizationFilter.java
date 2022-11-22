@@ -53,7 +53,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                            .setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null,
                                userDetails.getAuthorities()));
     }
-    catch (Exception e) {
+    catch (RuntimeException e) {
       SecurityContextHolder.clearContext();
     }
     filterChain.doFilter(request, response);

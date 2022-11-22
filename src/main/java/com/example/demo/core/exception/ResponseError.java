@@ -3,13 +3,14 @@ package com.example.demo.core.exception;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Map;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class ResponseError implements Serializable {
   private LocalDate timeStamp;
   private Map<String, Object> errors;
 
-  public ResponseError() {
-  }
+
 
   public LocalDate getTimeStamp() {
     return timeStamp;

@@ -1,6 +1,6 @@
 package com.example.demo.domain.role;
 
-import com.example.demo.core.generic.ExtendedEntity;
+import com.example.demo.core.generic.AbstractEntity;
 import com.example.demo.domain.authority.Authority;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "role")
-public class Role extends ExtendedEntity {
+public class Role extends AbstractEntity {
 
   @Column(name = "name", nullable = false, unique = true)
   private String name;

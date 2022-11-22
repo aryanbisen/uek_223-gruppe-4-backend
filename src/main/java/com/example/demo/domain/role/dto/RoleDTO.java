@@ -1,6 +1,6 @@
 package com.example.demo.domain.role.dto;
 
-import com.example.demo.core.generic.ExtendedDTO;
+import com.example.demo.core.generic.AbstractDTO;
 import com.example.demo.domain.authority.dto.AuthorityDTO;
 import java.util.Set;
 import java.util.UUID;
@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class RoleDTO extends ExtendedDTO {
+public class RoleDTO extends AbstractDTO {
 
   @NotNull
   @Size(min = 1, max = 255)

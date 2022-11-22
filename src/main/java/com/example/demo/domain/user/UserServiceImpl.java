@@ -1,6 +1,6 @@
 package com.example.demo.domain.user;
 
-import com.example.demo.core.generic.ExtendedServiceImpl;
+import com.example.demo.core.generic.AbstractServiceImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl extends ExtendedServiceImpl<User> implements UserService {
+public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
 
   private final PasswordEncoder passwordEncoder;
 

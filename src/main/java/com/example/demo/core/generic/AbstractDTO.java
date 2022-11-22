@@ -2,14 +2,14 @@ package com.example.demo.core.generic;
 
 import java.util.UUID;
 
-public abstract class ExtendedDTO {
+public abstract class AbstractDTO {
 
   private UUID id;
 
-  protected ExtendedDTO() {
+  protected AbstractDTO() {
   }
 
-  protected ExtendedDTO(UUID id) {
+  protected AbstractDTO(UUID id) {
     this.id = id;
   }
 
@@ -17,7 +17,7 @@ public abstract class ExtendedDTO {
     return id;
   }
 
-  public ExtendedDTO setId(UUID id) {
+  public AbstractDTO setId(UUID id) {
     this.id = id;
     return this;
   }

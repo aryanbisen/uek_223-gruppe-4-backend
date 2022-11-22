@@ -8,18 +8,18 @@ import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.GenericGenerator;
 
 @MappedSuperclass
-public abstract class ExtendedEntity {
+public abstract class AbstractEntity {
 
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(name = "id", updatable = false, nullable = false)
+  @Column(columnDefinition = "uuid", name = "id", updatable = false, nullable = false)
   private UUID id;
 
-  protected ExtendedEntity() {
+  protected AbstractEntity() {
   }
 
-  protected ExtendedEntity(UUID id) {
+  protected AbstractEntity(UUID id) {
     this.id = id;
   }
 
@@ -27,7 +27,7 @@ public abstract class ExtendedEntity {
     return id;
   }
 
-  public ExtendedEntity setId(UUID id) {
+  public AbstractEntity setId(UUID id) {
     this.id = id;
     return this;
   }

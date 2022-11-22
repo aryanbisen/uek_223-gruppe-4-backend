@@ -3,7 +3,7 @@ package com.example.demo.core.generic;
 import java.util.List;
 import java.util.Set;
 
-public interface ExtendedMapper<BO extends ExtendedEntity, DTO extends ExtendedDTO> {
+public interface AbstractMapper<BO extends AbstractEntity, DTO extends AbstractDTO> {
 
   BO fromDTO(DTO dto);
 
