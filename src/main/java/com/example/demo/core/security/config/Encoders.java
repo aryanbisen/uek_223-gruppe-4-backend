@@ -6,11 +6,8 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@SuppressWarnings("java:S1874")
 public class Encoders {
-
-  @SuppressWarnings("java:S125")
-  /*
+  /*  To-Do
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
     return new BCryptPasswordEncoder();

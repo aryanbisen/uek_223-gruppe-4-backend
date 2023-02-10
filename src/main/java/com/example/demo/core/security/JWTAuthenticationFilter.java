@@ -14,8 +14,7 @@ import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,11 +25,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+@Log4j2
 public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-  private static final Logger JWT_LOGGER = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
   private final JwtProperties jwtProperties;
-
 
   public JWTAuthenticationFilter(RequestMatcher requestMatcher, AuthenticationManager authenticationManager,
                                  JwtProperties jwtProperties) {
@@ -61,15 +59,17 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
           new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
     }
     catch (IOException e) {
-      JWT_LOGGER.error("Exception while Authentication thrown.", e);
+      log.error("Exception while Authentication thrown.", e);
       return null;
     }
   }
 
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                          Authentication authResult) {
+                                          Authentication authResult) throws IOException {
     response.addHeader(HttpHeaders.AUTHORIZATION, AuthorizationSchemas.BEARER + " " + generateToken(authResult));
+    UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authResult.getPrincipal();
+    response.getWriter().write(new ObjectMapper().writeValueAsString(userDetailsImpl.user()));
   }
 
   @Override

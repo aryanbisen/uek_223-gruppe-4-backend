@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -18,7 +19,8 @@ public class CustomGlobalExceptionHandler {
 
   //May be used for further ExceptionHandlers
   //messageSource.getMessage("errors.exception.message", null, LocaleContextHolder.getLocale())
-  //private MessageSource messageSource;
+  private MessageSource messageSource;
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseError handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {

@@ -38,10 +38,10 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    return http.authorizeRequests(requests -> requests.antMatchers(HttpMethod.POST, "/user/login","/user/register")
-                                                      .permitAll()
-                                                      .anyRequest()
-                                                      .authenticated())
+    return http.authorizeRequests(
+        requests -> requests.antMatchers(HttpMethod.POST, "/user/login", "/user/register").permitAll()
+                            .antMatchers(HttpMethod.GET, "/v3/api-docs","/v3/api-docs/swagger-config","/swagger-ui/*","/myapi/*/*").permitAll()
+                            .anyRequest().authenticated())
                .addFilterAfter(new JWTAuthenticationFilter(new AntPathRequestMatcher("/user/login", "POST"),
                    authenticationManager(), jwtProperties), UsernamePasswordAuthenticationFilter.class)
                .addFilterAfter(new JWTAuthorizationFilter(userService, jwtProperties),
@@ -49,11 +49,9 @@ public class WebSecurityConfig {
                .sessionManagement()
                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                .and()
-               .cors()
-               .configurationSource(corsConfigurationSource())
+               .cors().configurationSource(corsConfigurationSource())
                .and()
-               .csrf()
-               .disable()
+               .csrf().disable()
                .build();
   }
 

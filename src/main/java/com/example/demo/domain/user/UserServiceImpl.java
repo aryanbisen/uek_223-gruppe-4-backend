@@ -1,7 +1,6 @@
 package com.example.demo.domain.user;
 
 import com.example.demo.core.generic.AbstractServiceImpl;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,8 +13,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserServiceImpl(UserRepository repository, Logger logger, PasswordEncoder passwordEncoder) {
-    super(repository, logger);
+  public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+    super(repository);
     this.passwordEncoder = passwordEncoder;
   }
 

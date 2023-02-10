@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public abstract class AbstractServiceImpl<T extends AbstractEntity> implements AbstractService<T> {
 
   protected final AbstractRepository<T> repository;
-  protected final Logger logger;
 
-  protected AbstractServiceImpl(AbstractRepository<T> repository, Logger logger) {
+  protected AbstractServiceImpl(AbstractRepository<T> repository) {
     this.repository = repository;
-    this.logger = logger;
   }
 
   @Override
