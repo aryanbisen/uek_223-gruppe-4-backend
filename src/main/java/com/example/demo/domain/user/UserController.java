@@ -53,7 +53,7 @@ public class UserController {
   }
   @PostMapping("/registerUser")
   public ResponseEntity<UserDTO> registerWithoutPassword(@Valid @RequestBody UserDTO userDTO) {
-    User user = userService.register(userMapper.fromDTO(userDTO));
+    User user = userService.registerUser(userMapper.fromDTO(userDTO));
     return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.CREATED);
   }
   @PutMapping("/{id}")
