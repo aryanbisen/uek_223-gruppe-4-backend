@@ -51,7 +51,11 @@ public class UserController {
     User user = userService.register(userMapper.fromUserRegisterDTO(userRegisterDTO));
     return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.CREATED);
   }
-
+  @PostMapping("/registerUser")
+  public ResponseEntity<UserDTO> registerWithoutPassword(@Valid @RequestBody UserDTO userDTO) {
+    User user = userService.registerUser(userMapper.fromDTO(userDTO));
+    return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.CREATED);
+  }
   @PutMapping("/{id}")
   @PreAuthorize(
       "hasAuthority('USER_MODIFY') && @userPermissionEvaluator.isUserAboveAge(authentication.principal.user,18)")

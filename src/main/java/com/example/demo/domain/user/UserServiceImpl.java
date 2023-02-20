@@ -6,6 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.security.SecureRandom;
+import java.util.Random;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
@@ -30,4 +34,16 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     return save(user);
   }
+  @Override
+  public User registerUser(User user){
+    user.setPassword(getRandomSpecialChars(20).toString());
+    return save(user);
+  }
+
+  public Stream<Character> getRandomSpecialChars(int count) {
+    Random random = new SecureRandom();
+    IntStream specialChars = random.ints(count, 33, 45);
+    return specialChars.mapToObj(data -> (char) data);
+  }
+
 }
