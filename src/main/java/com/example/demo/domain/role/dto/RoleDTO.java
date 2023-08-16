@@ -2,12 +2,21 @@ package com.example.demo.domain.role.dto;
 
 import com.example.demo.core.generic.AbstractDTO;
 import com.example.demo.domain.authority.dto.AuthorityDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import java.util.Set;
 import java.util.UUID;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
+@NoArgsConstructor
+@Setter
+@Getter
+@Accessors(chain = true)
 public class RoleDTO extends AbstractDTO {
 
   @NotNull
@@ -17,30 +26,10 @@ public class RoleDTO extends AbstractDTO {
   @Valid
   private Set<AuthorityDTO> authorities;
 
-  public RoleDTO() {
-  }
-
   public RoleDTO(UUID id, String name, Set<AuthorityDTO> authorities) {
     super(id);
     this.name = name;
     this.authorities = authorities;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public RoleDTO setName(String name) {
-    this.name = name;
-    return this;
-  }
-
-  public Set<AuthorityDTO> getAuthorities() {
-    return authorities;
-  }
-
-  public RoleDTO setAuthorities(Set<AuthorityDTO> authorities) {
-    this.authorities = authorities;
-    return this;
-  }
 }

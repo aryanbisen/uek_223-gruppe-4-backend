@@ -4,9 +4,17 @@ import com.example.demo.core.generic.AbstractDTO;
 import com.example.demo.domain.role.dto.RoleDTO;
 import java.util.Set;
 import java.util.UUID;
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@NoArgsConstructor
+@Getter
+@Setter
+@Accessors(chain = true)
 public class UserDTO extends AbstractDTO {
 
   private String firstName;
@@ -19,9 +27,6 @@ public class UserDTO extends AbstractDTO {
   @Valid
   private Set<RoleDTO> roles;
 
-  public UserDTO() {
-  }
-
   public UserDTO(UUID id, String firstName, String lastName, String email, Set<RoleDTO> roles) {
     super(id);
     this.firstName = firstName;
@@ -30,39 +35,4 @@ public class UserDTO extends AbstractDTO {
     this.roles = roles;
   }
 
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public UserDTO setFirstName(String firstName) {
-    this.firstName = firstName;
-    return this;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public UserDTO setLastName(String lastName) {
-    this.lastName = lastName;
-    return this;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public UserDTO setEmail(String email) {
-    this.email = email;
-    return this;
-  }
-
-  public Set<RoleDTO> getRoles() {
-    return roles;
-  }
-
-  public UserDTO setRoles(Set<RoleDTO> roles) {
-    this.roles = roles;
-    return this;
-  }
 }
