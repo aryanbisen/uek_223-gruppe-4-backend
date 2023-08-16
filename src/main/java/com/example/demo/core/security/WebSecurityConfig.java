@@ -16,6 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -45,9 +50,21 @@ public class WebSecurityConfig {
                .addFilterAfter(new JWTAuthorizationFilter(userService, jwtProperties),
                    UsernamePasswordAuthenticationFilter.class)
                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-               .cors(withDefaults())
+               .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                .csrf(csrf -> csrf.disable())
                .build();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(List.of("*"));
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+    configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+    configuration.setExposedHeaders(List.of("Authorization"));
+    UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
+    configurationSource.registerCorsConfiguration("/**", configuration);
+    return configurationSource;
   }
 
   @Bean
