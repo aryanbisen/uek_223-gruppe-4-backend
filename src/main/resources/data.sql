@@ -8,8 +8,8 @@ values ('ba804cb9-fa14-42a5-afaf-be488742fc54', 'admin@example.com', 'James','Bo
 --ROLES
 INSERT INTO role(id, name)
 VALUES ('d29e709c-0ff1-4f4c-a7ef-09f656c390f1', 'DEFAULT'),
-('ab505c92-7280-49fd-a7de-258e618df074', 'USER_MODIFY'),
-('c6aee32d-8c35-4481-8b3e-a876a39b0c02', 'USER_DELETE')
+('ab505c92-7280-49fd-a7de-258e618df074', 'ADMIN'),
+('c6aee32d-8c35-4481-8b3e-a876a39b0c02', 'USER')
 ON CONFLICT DO NOTHING;
 
 --AUTHORITIES
