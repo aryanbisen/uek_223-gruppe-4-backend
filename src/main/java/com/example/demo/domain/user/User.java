@@ -5,16 +5,24 @@ import com.example.demo.domain.role.Role;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@Getter
+@Setter
+@Accessors(chain = true)
 public class User extends AbstractEntity {
 
   @Column(name = "first_name")
@@ -34,9 +42,6 @@ public class User extends AbstractEntity {
              inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
   private Set<Role> roles = new HashSet<>();
 
-  public User() {
-  }
-
   public User(UUID id, String firstName, String lastName, String email, String password, Set<Role> roles) {
     super(id);
     this.firstName = firstName;
@@ -46,48 +51,4 @@ public class User extends AbstractEntity {
     this.roles = roles;
   }
 
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public User setFirstName(String firstName) {
-    this.firstName = firstName;
-    return this;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public User setLastName(String lastName) {
-    this.lastName = lastName;
-    return this;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public User setEmail(String email) {
-    this.email = email;
-    return this;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public User setPassword(String password) {
-    this.password = password;
-    return this;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public User setRoles(Set<Role> roles) {
-    this.roles = roles;
-    return this;
-  }
 }

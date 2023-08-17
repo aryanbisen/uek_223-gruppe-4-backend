@@ -9,7 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +22,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
   private final UserService userService;
@@ -39,22 +41,19 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    return http.authorizeRequests(
-        requests -> requests.antMatchers(HttpMethod.POST, "/user/login", "/user/register").permitAll()
-                            .antMatchers(HttpMethod.GET, "/v3/api-docs","/v3/api-docs/swagger-config","/swagger-ui/*","/myapi/*/*","/myapi/*").permitAll()
+    return http.authorizeHttpRequests(
+        requests -> requests.requestMatchers(HttpMethod.POST, "/user/login", "/user/register").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/v3/api-docs","/v3/api-docs/swagger-config","/swagger-ui/*","/myapi/*/*","/myapi/*").permitAll()
                             .anyRequest().authenticated())
                .addFilterAfter(new JWTAuthenticationFilter(new AntPathRequestMatcher("/user/login", "POST"),
                    authenticationManager(), jwtProperties), UsernamePasswordAuthenticationFilter.class)
                .addFilterAfter(new JWTAuthorizationFilter(userService, jwtProperties),
                    UsernamePasswordAuthenticationFilter.class)
-               .sessionManagement()
-               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-               .and()
-               .cors().configurationSource(corsConfigurationSource())
-               .and()
-               .formLogin().and()
-               .csrf().disable()
-               .build();
+               .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+               .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+               .csrf(csrf -> csrf.disable())
+            .formLogin().and()
+            .build();
   }
 
   @Bean
@@ -64,10 +63,8 @@ public class WebSecurityConfig {
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
     configuration.setExposedHeaders(List.of("Authorization"));
-
     UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
     configurationSource.registerCorsConfiguration("/**", configuration);
-
     return configurationSource;
   }
 

@@ -1,24 +1,18 @@
 package com.example.demo.core.generic;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public abstract class AbstractDTO {
 
   private UUID id;
 
-  protected AbstractDTO() {
-  }
-
-  protected AbstractDTO(UUID id) {
-    this.id = id;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public AbstractDTO setId(UUID id) {
-    this.id = id;
-    return this;
-  }
 }

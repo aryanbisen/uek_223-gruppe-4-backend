@@ -1,13 +1,21 @@
 package com.example.demo.core.generic;
 
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 @MappedSuperclass
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractEntity {
 
   @Id
@@ -16,19 +24,4 @@ public abstract class AbstractEntity {
   @Column(columnDefinition = "uuid", name = "id", updatable = false, nullable = false)
   private UUID id;
 
-  protected AbstractEntity() {
-  }
-
-  protected AbstractEntity(UUID id) {
-    this.id = id;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public AbstractEntity setId(UUID id) {
-    this.id = id;
-    return this;
-  }
 }
