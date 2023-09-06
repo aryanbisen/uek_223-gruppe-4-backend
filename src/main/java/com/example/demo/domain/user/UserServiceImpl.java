@@ -36,7 +36,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
   }
   @Override
   public User registerUser(User user){
-    user.setPassword(getRandomSpecialChars(20).toString());
+    user.setPassword(passwordEncoder.encode("1234"));
     return save(user);
   }
 
