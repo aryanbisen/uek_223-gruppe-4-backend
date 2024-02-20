@@ -35,6 +35,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
     return save(user);
   }
   @Override
+  //This Method can be used for development and testing. the Password for the user will be set to "1234"
   public User registerUser(User user){
     user.setPassword(passwordEncoder.encode("1234"));
     return save(user);

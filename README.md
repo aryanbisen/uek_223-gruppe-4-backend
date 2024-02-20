@@ -14,4 +14,4 @@ docker run --name postgres_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=pos
 ```
 org.postgresql.util.PSQLException: ERROR: relation "role_authority" does not exist
 ```
-Simply restart the application. Hibernate sometimes does not initialize the tables fast enough an causes thios error. restarting the application fixes this.
+Simply restart the application. Hibernate sometimes does not initialize the tables fast enough and causes this error. Restarting the application fixes this.
