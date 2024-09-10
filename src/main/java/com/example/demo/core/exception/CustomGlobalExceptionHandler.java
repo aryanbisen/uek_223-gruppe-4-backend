@@ -1,6 +1,5 @@
 package com.example.demo.core.exception;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.multipart.MultipartException;
 
 @RestControllerAdvice
 @AllArgsConstructor
@@ -66,25 +64,6 @@ public class CustomGlobalExceptionHandler {
                               .build();
   }
 
-  @ExceptionHandler({MultipartException.class})
-  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  public ResponseError handleMultipartException(Throwable e) {
-    Map<String, String> errors = new HashMap<>();
-    errors.put("multipart", e.getMessage());
-    return new ResponseError().setTimeStamp(LocalDate.now())
-                              .setErrors(errors)
-                              .build();
-  }
-
-  @ExceptionHandler({FileNotFoundException.class})
-  @ResponseStatus(value = HttpStatus.NOT_FOUND)
-  public ResponseError handleFileNotFound(Throwable e) {
-    Map<String, String> errors = new HashMap<>();
-    errors.put("file", e.getMessage());
-    return new ResponseError().setTimeStamp(LocalDate.now())
-                              .setErrors(errors)
-                              .build();
-  }
 
   @ExceptionHandler({IOException.class})
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
