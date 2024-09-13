@@ -15,6 +15,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -68,8 +69,6 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                           Authentication authResult) throws IOException {
     response.addHeader(HttpHeaders.AUTHORIZATION, AuthorizationSchemas.BEARER + " " + generateToken(authResult));
-    UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authResult.getPrincipal();
-    response.getWriter().write(new ObjectMapper().writeValueAsString(userDetailsImpl.user()));
   }
 
   @Override
