@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "events")
 @NoArgsConstructor
 @Getter
 @Setter
