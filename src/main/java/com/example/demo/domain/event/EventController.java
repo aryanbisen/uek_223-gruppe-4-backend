@@ -22,8 +22,8 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping({"", "/"})
-    public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventService.getAllEvents();
+    public ResponseEntity<List<EventDTO>> getAllEvents() {
+        List<EventDTO> events = eventService.getAllEvents();
         return ResponseEntity.ok().body(events);
     }
 
