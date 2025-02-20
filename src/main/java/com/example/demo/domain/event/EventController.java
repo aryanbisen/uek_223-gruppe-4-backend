@@ -18,11 +18,12 @@ import java.util.Set;
 public class EventController {
 
     @Autowired
-    private UserService userService;
+    private EventService eventService;
 
     @GetMapping({"", "/"})
-    public ResponseEntity<List<UserDTO>> getAllEvents() {
-        return null;
+    public ResponseEntity<List<Event>> getAllEvents() {
+        List<Event> events = eventService.getAllEvents();
+        return ResponseEntity.ok().body(events);
     }
 
 
