@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
@@ -67,6 +68,14 @@ public class EventService {
             }
         }
         return Optional.empty();
+    }
+
+    public void deleteEventById(UUID id) throws NoSuchElementException {
+        if (eventRepository.existsById(id)) {
+            eventRepository.deleteById(id);
+        } else {
+            throw new NoSuchElementException(String.format("Event with ID '%s' could not be found", id));
+        }
     }
 
     private boolean isValid(Event event) {
