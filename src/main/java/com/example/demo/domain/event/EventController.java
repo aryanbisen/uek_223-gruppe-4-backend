@@ -1,16 +1,17 @@
 package com.example.demo.domain.event;
 
+import com.example.demo.domain.event.dto.EventDTO;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserService;
 import com.example.demo.domain.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -20,10 +21,26 @@ public class EventController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EventService eventService;
+
     @GetMapping({"", "/"})
     public ResponseEntity<List<UserDTO>> getAllEvents() {
         return null;
     }
 
+    @PostMapping({"", "/"})
+    public ResponseEntity<URL> createEvent(@RequestBody EventDTO event) {
+        Optional<URL> result = eventService.createEvent(new Event());
+        return result.map(url -> new ResponseEntity<>(url, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
+    @PutMapping({"", "/"})
+    public ResponseEntity<URL> updateEvent(@RequestBody EventDTO event) {
+        Optional<URL> result = eventService.updateEvent(new Event());
+        return result.map(url -> new ResponseEntity<>(url, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
 }
