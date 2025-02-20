@@ -1,5 +1,6 @@
 package com.example.demo.domain.event;
 
+import com.example.demo.domain.event.dto.EventDTO;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserService;
 import com.example.demo.domain.user.dto.UserDTO;
@@ -21,8 +22,8 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping({"", "/"})
-    public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventService.getAllEvents();
+    public ResponseEntity<List<EventDTO>> getAllEvents() {
+        List<EventDTO> events = eventService.getAllEvents();
         return ResponseEntity.ok().body(events);
     }
 

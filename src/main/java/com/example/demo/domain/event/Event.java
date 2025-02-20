@@ -21,6 +21,9 @@ import java.util.UUID;
 @Setter
 @Accessors(chain = true)
 public class Event extends AbstractEntity {
+    @ManyToOne()
+    @JoinColumn(name = "event_creator", referencedColumnName = "id", nullable = false)
+    private User eventCreator;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
