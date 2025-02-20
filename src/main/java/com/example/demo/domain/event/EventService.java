@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.List;
 
 
 @Service
@@ -18,6 +19,9 @@ public class EventService {
     public EventService() {
     }
 
+    public List<Event> getAllEvents (){
+        return eventRepository.findAll();
+    }
 
     @Transactional
     public Optional<URL> createEvent(Event event) {
