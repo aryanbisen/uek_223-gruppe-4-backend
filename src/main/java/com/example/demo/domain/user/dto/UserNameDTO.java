@@ -11,7 +11,6 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class UserNameDTO {
-    private User eventCreator;
     private String firstName;
     private String lastName;
 

@@ -33,10 +33,10 @@ VALUES ('d29e709c-0ff1-4f4c-a7ef-09f656c390f1', '2ebf301e-6c61-4076-98e3-2a38b31
        ('c6aee32d-8c35-4481-8b3e-a876a39b0c02', '21c942db-a275-43f8-bdd6-d048c21bf5ab') ON CONFLICT DO NOTHING;
 
 --EVENTS
-INSERT INTO events (id, event_name, date, location)
-VALUES ('550e8400-e29b-41d4-a716-446655440000', 'Spring Boot Conference', '2025-06-15', 'New York'),
-       ('550e8400-e29b-41d4-a716-446655440001', 'Java Dev Meetup', '2025-07-20', 'San Francisco'),
-       ('550e8400-e29b-41d4-a716-446655440002', 'Tech Hackathon', '2025-08-10', 'Seattle');
+INSERT INTO events (id, event_creator, event_name, date, location)
+VALUES ('550e8400-e29b-41d4-a716-446655440000', 'ba804cb9-fa14-42a5-afaf-be488742fc54','Spring Boot Conference', '2025-06-15', 'New York'),
+       ('550e8400-e29b-41d4-a716-446655440001', 'ba804cb9-fa14-42a5-afaf-be488742fc54','Java Dev Meetup', '2025-07-20', 'San Francisco'),
+       ('550e8400-e29b-41d4-a716-446655440002', 'ba804cb9-fa14-42a5-afaf-be488742fc54',' Tech Hackathon', '2025-08-10', 'Seattle');
 
 INSERT INTO events_guests (events_id, users_id)
 VALUES ('550e8400-e29b-41d4-a716-446655440000', 'ba804cb9-fa14-42a5-afaf-be488742fc54'), -- James at Spring Boot                                      -- John at Spring Boot Conference

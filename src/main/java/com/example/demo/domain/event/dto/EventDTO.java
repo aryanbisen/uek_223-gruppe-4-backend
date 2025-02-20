@@ -1,6 +1,8 @@
 package com.example.demo.domain.event.dto;
 
+import com.example.demo.core.generic.AbstractDTO;
 import com.example.demo.domain.user.dto.UserDTO;
+import com.example.demo.domain.user.dto.UserNameDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +16,10 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
-    private UUID id;
+public class EventDTO extends AbstractDTO {
+    private UserNameDTO eventCreator;
     private String eventName;
     private LocalDate date;
     private String location;
-    private Set<UserDTO> guestList; // Uses UserDTO instead of User
+    private Set<UserNameDTO> guestList; // Uses UserDTO instead of User
 }
