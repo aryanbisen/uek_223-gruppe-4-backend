@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/event")
@@ -27,16 +28,23 @@ public class EventController {
         return ResponseEntity.ok().body(events);
     }
 
+    @GetMapping({"{id}", "/{id}"})
+    public ResponseEntity<EventDTO> getEvent(@PathVariable UUID id) {
+        Optional<EventDTO> result = eventService.getEvent(id);
+        return result.map(event -> new ResponseEntity<>(event, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PostMapping({"", "/"})
     public ResponseEntity<URL> createEvent(@RequestBody EventDTO event) {
-        Optional<URL> result = eventService.createEvent(new Event());
+        Optional<URL> result = eventService.createEvent(event);
         return result.map(url -> new ResponseEntity<>(url, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @PutMapping({"", "/"})
     public ResponseEntity<URL> updateEvent(@RequestBody EventDTO event) {
-        Optional<URL> result = eventService.updateEvent(new Event());
+        Optional<URL> result = eventService.updateEvent(event);
         return result.map(url -> new ResponseEntity<>(url, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

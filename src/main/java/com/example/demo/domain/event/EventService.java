@@ -11,6 +11,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -28,12 +29,18 @@ public class EventService {
         return eventRepository.findAll().stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
+    public Optional<EventDTO> getEvent(UUID id) {
+        return eventRepository.findById(id).map(eventMapper::toDTO);
+    }
+
     @Transactional
-    public Optional<URL> createEvent(Event event) {
+    public Optional<URL> createEvent(EventDTO eventDto) {
+        Event event = eventMapper.fromDTO(eventDto);
+
         if (isValid(event)) {
             eventRepository.save(event);
             try {
-                URL result = new URL("https://localhost:8080/events/" + event.getId());
+                URL result = new URL("https://localhost:8080/event/" + event.getId());
                 return Optional.of(result);
             } catch (MalformedURLException e) {
                 return Optional.empty();
@@ -43,7 +50,9 @@ public class EventService {
     }
 
     @Transactional
-    public Optional<URL> updateEvent(Event event) {
+    public Optional<URL> updateEvent(EventDTO eventDto) {
+        Event event = eventMapper.fromDTO(eventDto);
+
         if (eventRepository.findById(event.getId()).isEmpty()) {
             return Optional.empty();
         }
@@ -51,7 +60,7 @@ public class EventService {
         if (isValid(event)) {
             eventRepository.save(event);
             try {
-                URL result = new URL("https://localhost:8080/events/" + event.getId());
+                URL result = new URL("https://localhost:8080/event/" + event.getId());
                 return Optional.of(result);
             } catch (MalformedURLException e) {
                 return Optional.empty();
