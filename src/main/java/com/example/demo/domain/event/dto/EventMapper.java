@@ -8,4 +8,6 @@ import org.mapstruct.ReportingPolicy;
 public interface EventMapper {
  EventDTO toDTO (Event event);
  Event fromDTO (EventDTO dto);
+ CreateEventDTO toCreateDTO (Event event);
+ Event fromCreateDTO (CreateEventDTO dto);
 }
