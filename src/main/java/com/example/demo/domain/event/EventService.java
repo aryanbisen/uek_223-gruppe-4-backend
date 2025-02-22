@@ -13,7 +13,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -26,12 +25,12 @@ public class EventService {
         this.eventMapper = eventMapper;
     }
 
-    public List<EventDTO> getAllEvents (){
-        return eventRepository.findAll().stream().map(eventMapper::toDTO).collect(Collectors.toList());
+    public List<Event> getAllEvents (){
+        return eventRepository.findAll();
     }
 
-    public Optional<EventDTO> getEvent(UUID id) {
-        return eventRepository.findById(id).map(eventMapper::toDTO);
+    public Event getEvent(UUID id) {
+        return eventRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional

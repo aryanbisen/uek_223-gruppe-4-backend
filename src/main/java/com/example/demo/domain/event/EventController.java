@@ -1,9 +1,7 @@
 package com.example.demo.domain.event;
 
 import com.example.demo.domain.event.dto.EventDTO;
-import com.example.demo.domain.user.User;
-import com.example.demo.domain.user.UserService;
-import com.example.demo.domain.user.dto.UserDTO;
+import com.example.demo.domain.event.dto.EventMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -22,17 +19,24 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    private final EventMapper eventMapper;
+
+    public EventController(EventService eventService, EventMapper eventMapper) {
+        this.eventService = eventService;
+        this.eventMapper = eventMapper;
+    }
+
+
     @GetMapping({"", "/"})
     public ResponseEntity<List<EventDTO>> getAllEvents() {
-        List<EventDTO> events = eventService.getAllEvents();
-        return ResponseEntity.ok().body(events);
+        List<Event> events = eventService.getAllEvents();
+        return new ResponseEntity<>(eventMapper.toDTOs(events), HttpStatus.OK);
     }
 
     @GetMapping({"{id}", "/{id}"})
     public ResponseEntity<EventDTO> getEvent(@PathVariable UUID id) {
-        Optional<EventDTO> result = eventService.getEvent(id);
-        return result.map(event -> new ResponseEntity<>(event, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Event event = eventService.getEvent(id);
+        return new ResponseEntity<>(eventMapper.toDTO(event), HttpStatus.OK);
     }
 
     @PostMapping({"", "/"})
