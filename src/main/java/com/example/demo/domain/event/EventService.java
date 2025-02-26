@@ -4,6 +4,7 @@ import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,23 @@ public class EventService {
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
+    }
+
+    public List<Event> getAllEvents (Integer size, Integer offset) {
+        if (size < 1 || offset < 0) {
+            throw new IllegalArgumentException("Invalid pagination details provided.");
+        }
+        PageRequest request = PageRequest.of(offset, size);
+        return eventRepository.findAll(request).toList();
+    }
+
+    public List<User> getAllGuests (UUID eventId, Integer size, Integer offset) {
+        if (size < 1 || offset < 0) {
+            throw new IllegalArgumentException("Invalid pagination details provided.");
+        }
+        Event event = eventRepository.findById(eventId).orElseThrow(NoSuchElementException::new);
+        List<User> guests = event.getGuestList().stream().toList();
+        return guests.subList(offset * size, (offset * size) + size);
     }
 
     public Event getEvent(UUID id) {

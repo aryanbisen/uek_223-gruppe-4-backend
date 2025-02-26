@@ -5,6 +5,8 @@ import com.example.demo.domain.event.dto.EventDTO;
 import com.example.demo.domain.event.dto.EventMapper;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserService;
+import com.example.demo.domain.user.dto.UserDTO;
+import com.example.demo.domain.user.dto.UserMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,18 +27,29 @@ public class EventController {
 
     @Autowired
     private UserService userService;
+
     private final EventMapper eventMapper;
 
-    public EventController(EventService eventService, EventMapper eventMapper) {
-        this.eventService = eventService;
+    private final UserMapper userMapper;
+
+    public EventController(EventMapper eventMapper, UserMapper userMapper) {
         this.eventMapper = eventMapper;
+        this.userMapper = userMapper;
     }
 
-
     @GetMapping({"", "/"})
-    public ResponseEntity<List<EventDTO>> getAllEvents() {
-        List<Event> events = eventService.getAllEvents();
+    public ResponseEntity<List<EventDTO>> getAllEvents(@RequestParam("size") Integer size,
+                                                       @RequestParam("offset") Integer offset) {
+        List<Event> events = eventService.getAllEvents(size, offset);
         return new ResponseEntity<>(eventMapper.toDTOs(events), HttpStatus.OK);
+    }
+
+    @GetMapping({"{id}/guests/", "/{id}/guests/"})
+    public ResponseEntity<List<UserDTO>> getAllGuests(@PathVariable("id") UUID id,
+                                                      @RequestParam("size") Integer size,
+                                                      @RequestParam("offset") Integer offset) {
+        List<User> guests = eventService.getAllGuests(id, size, offset);
+        return new ResponseEntity<>(userMapper.toDTOs(guests), HttpStatus.OK);
     }
 
     @GetMapping({"{id}", "/{id}"})
@@ -46,9 +59,9 @@ public class EventController {
     }
 
     @PostMapping({"", "/"})
-    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody CreateEventDTO dto) {
-        Event event = eventMapper.fromCreateEventDTO(dto);
-        Set<User> guestList = userService.getUsersById(dto.getGuestList());
+    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody CreateEventDTO eventDto) {
+        Event event = eventMapper.fromCreateEventDTO(eventDto);
+        Set<User> guestList = userService.getUsersById(eventDto.getGuestList());
         event.setGuestList(guestList);
         Event savedEvent = eventService.createEvent(event);
         return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
@@ -72,8 +85,8 @@ public class EventController {
         return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEventById(@PathVariable UUID id) {
+    @DeleteMapping({"{id}", "/{id}"})
+    public ResponseEntity<Void> deleteEventById(@PathVariable("id") UUID id) {
         eventService.deleteEventById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
