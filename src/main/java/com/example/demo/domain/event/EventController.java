@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -41,7 +40,7 @@ public class EventController {
     }
 
     @GetMapping({"{id}", "/{id}"})
-    public ResponseEntity<EventDTO> getEvent(@PathVariable UUID id) {
+    public ResponseEntity<EventDTO> getEvent(@PathVariable("id") UUID id) {
         Event event = eventService.getEvent(id);
         return new ResponseEntity<>(eventMapper.toDTO(event), HttpStatus.OK);
     }
@@ -56,10 +55,20 @@ public class EventController {
     }
 
 
-    @PutMapping({"", "/"})
-    public ResponseEntity<EventDTO> updateEvent(@RequestBody EventDTO eventDto) {
-        Event event = eventMapper.fromDTO(eventDto);
-        Event savedEvent = eventService.updateEvent(event);
+    @PutMapping("/{id}")
+    public ResponseEntity<EventDTO> updateEvent(@RequestBody CreateEventDTO eventDto, @PathVariable("id") UUID id) {
+        Event event = eventMapper.fromCreateEventDTO(eventDto);
+        event.setId(id);
+        Event savedEvent;
+
+        try {
+            savedEvent = eventService.updateEvent(event);
+        } catch (ResponseStatusException responseStatusException){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        }
+
+
         return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
     }
 
