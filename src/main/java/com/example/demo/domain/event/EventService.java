@@ -1,33 +1,23 @@
 package com.example.demo.domain.event;
 
-import com.example.demo.domain.event.dto.EventDTO;
-import com.example.demo.domain.event.dto.EventMapper;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserDetailsImpl;
-import com.example.demo.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
 public class EventService {
     @Autowired
     private EventRepository eventRepository;
-    private final EventMapper eventMapper;
-
-    @Autowired
-    private UserService userService;
-
-    public EventService(EventMapper eventMapper) {
-        this.eventMapper = eventMapper;
-    }
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
@@ -54,23 +44,12 @@ public class EventService {
 
 
     @Transactional
-    public Optional<URL> updateEvent(EventDTO eventDto) {
-        Event event = eventMapper.fromDTO(eventDto);
-
-        if (eventRepository.findById(event.getId()).isEmpty()) {
-            return Optional.empty();
+    public Event updateEvent(Event event) {
+        if (!isValid(event)) {
+            throw new IllegalArgumentException("Invalid event details provided.");
         }
 
-        if (isValid(event)) {
-            eventRepository.save(event);
-            try {
-                URL result = new URL("https://localhost:8080/event/" + event.getId());
-                return Optional.of(result);
-            } catch (MalformedURLException e) {
-                return Optional.empty();
-            }
-        }
-        return Optional.empty();
+        return eventRepository.save(event);
     }
 
     public void deleteEventById(UUID id) throws NoSuchElementException {
@@ -86,7 +65,6 @@ public class EventService {
             return false;
         }
 
-        UUID id = event.getId();
         User eventCreator = event.getEventCreator();
         Set<User> guestList = event.getGuestList();
         String eventName = event.getEventName();

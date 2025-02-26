@@ -57,10 +57,10 @@ public class EventController {
 
 
     @PutMapping({"", "/"})
-    public ResponseEntity<URL> updateEvent(@RequestBody EventDTO event) {
-        Optional<URL> result = eventService.updateEvent(event);
-        return result.map(url -> new ResponseEntity<>(url, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<EventDTO> updateEvent(@RequestBody EventDTO eventDto) {
+        Event event = eventMapper.fromDTO(eventDto);
+        Event savedEvent = eventService.updateEvent(event);
+        return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
