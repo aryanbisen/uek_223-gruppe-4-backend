@@ -1,13 +1,15 @@
 package com.example.demo.domain.user;
 
 import com.example.demo.core.generic.AbstractServiceImpl;
+import com.example.demo.domain.user.dto.UserIdDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -15,6 +17,9 @@ import java.util.stream.Stream;
 public class UserServiceImpl extends AbstractServiceImpl<User> implements UserService {
 
   private final PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @Autowired
   public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
@@ -46,5 +51,21 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
     IntStream specialChars = random.ints(count, 33, 45);
     return specialChars.mapToObj(data -> (char) data);
   }
+
+  public User getUserByEmail(String email) {
+    return userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User with email " + email + " not found"));
+  }
+  public Set<User> getUsersById(Set<UserIdDTO> dtos) {
+    Set<UUID> userIds = dtos.stream()
+            .map(UserIdDTO::getId)
+            .collect(Collectors.toSet());
+
+    return new HashSet<User>(userRepository.findAllById(userIds)); // Convert List to Set
+  }
+
+
+
+
 
 }

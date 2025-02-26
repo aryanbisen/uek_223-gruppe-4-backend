@@ -46,4 +46,9 @@ public record UserDetailsImpl(User user) implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+  public User getUser() {
+    return user;
+  }
+
 }

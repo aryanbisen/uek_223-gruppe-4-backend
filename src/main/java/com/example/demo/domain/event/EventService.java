@@ -1,12 +1,15 @@
 package com.example.demo.domain.event;
 
+import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.*;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,42 +19,37 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public List<Event> getAllEvents (){
+    public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
-    public Optional<Event> getEvent(UUID id) {
-        return eventRepository.findById(id);
+    public Event getEvent(UUID id) {
+        return eventRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional
-    public Optional<Event> createEvent(Event event) {
-        if (isValid(event)) {
-            eventRepository.save(event);
-            try {
-                return Optional.of(event);
-            } catch (Exception e) {
-                return Optional.empty();
-            }
+    public Event createEvent(Event event) {
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User user = userDetails.getUser();
+        event.setEventCreator(user);
+
+        if (!isValid(event)) {
+            throw new IllegalArgumentException("Invalid event details provided.");
         }
-        return Optional.empty();
+
+        return eventRepository.save(event);
     }
 
+
     @Transactional
-    public Optional<Event> updateEvent(Event event) {
-        if (eventRepository.findById(event.getId()).isEmpty()) {
-            return Optional.empty();
+    public Event updateEvent(Event event) {
+        if (!isValid(event)) {
+            throw new IllegalArgumentException("Invalid event details provided.");
         }
 
-        if (isValid(event)) {
-            eventRepository.save(event);
-            try {
-                return Optional.of(event);
-            } catch (Exception e) {
-                return Optional.empty();
-            }
-        }
-        return Optional.empty();
+        return eventRepository.save(event);
     }
 
     public void deleteEventById(UUID id) throws NoSuchElementException {
@@ -63,12 +61,21 @@ public class EventService {
     }
 
     private boolean isValid(Event event) {
+        if (event == null) {
+            return false;
+        }
+
+        User eventCreator = event.getEventCreator();
+        Set<User> guestList = event.getGuestList();
         String eventName = event.getEventName();
         LocalDate eventDate = event.getDate();
         String eventLocation = event.getLocation();
-
-        return eventName != null && !eventName.isBlank() &&
+        return
+                eventCreator != null &&
+                eventName != null && !eventName.isBlank() &&
                 eventDate != null && !eventDate.isBefore(LocalDate.now()) &&
-                eventLocation != null && !eventLocation.isBlank();
+                eventLocation != null && !eventLocation.isBlank() &&
+                guestList != null; // Ensuring guest list is initialized (can be empty but not null).
     }
+
 }
