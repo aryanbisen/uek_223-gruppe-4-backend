@@ -1,7 +1,11 @@
 package com.example.demo.domain.event;
 
+import com.example.demo.domain.event.dto.CreateEventDTO;
 import com.example.demo.domain.event.dto.EventDTO;
 import com.example.demo.domain.event.dto.EventMapper;
+import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -19,6 +24,8 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private UserService userService;
     private final EventMapper eventMapper;
 
     public EventController(EventService eventService, EventMapper eventMapper) {
@@ -40,11 +47,14 @@ public class EventController {
     }
 
     @PostMapping({"", "/"})
-    public ResponseEntity<URL> createEvent(@RequestBody EventDTO event) {
-        Optional<URL> result = eventService.createEvent(event);
-        return result.map(url -> new ResponseEntity<>(url, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody CreateEventDTO dto) {
+        Event event = eventMapper.fromCreateEventDTO(dto);
+        Set<User> guestList = userService.getUsersById(dto.getGuestList());
+        event.setGuestList(guestList);
+        Event savedEvent = eventService.createEvent(event);
+        return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
     }
+
 
     @PutMapping({"", "/"})
     public ResponseEntity<URL> updateEvent(@RequestBody EventDTO event) {
