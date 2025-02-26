@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -74,6 +75,7 @@ public class EventController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('EVENT_MODIFY')")
     public ResponseEntity<EventDTO> updateEvent(@RequestBody CreateEventDTO eventDto, @PathVariable("id") UUID id) {
         Event event = eventMapper.fromCreateEventDTO(eventDto);
         event.setId(id);
@@ -94,6 +96,7 @@ public class EventController {
     }
 
     @DeleteMapping({"{id}", "/{id}"})
+    @PreAuthorize("hasAuthority('EVENT_DELETE')")
     public ResponseEntity<Void> deleteEventById(@PathVariable("id") UUID id) {
         eventService.deleteEventById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
