@@ -63,7 +63,12 @@ public class EventController {
         Event event = eventMapper.fromCreateEventDTO(eventDto);
         Set<User> guestList = userService.getUsersById(eventDto.getGuestList());
         event.setGuestList(guestList);
-        Event savedEvent = eventService.createEvent(event);
+        Event savedEvent = null;
+        try {
+            savedEvent = eventService.createEvent(event);
+        } catch (ResponseStatusException responseStatusException){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
     }
 
@@ -72,13 +77,16 @@ public class EventController {
     public ResponseEntity<EventDTO> updateEvent(@RequestBody CreateEventDTO eventDto, @PathVariable("id") UUID id) {
         Event event = eventMapper.fromCreateEventDTO(eventDto);
         event.setId(id);
-        Event savedEvent;
+        Event savedEvent = null;
 
         try {
             savedEvent = eventService.updateEvent(event);
         } catch (ResponseStatusException responseStatusException){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
+            if (responseStatusException.getStatusCode() == HttpStatus.FORBIDDEN) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } else if (responseStatusException.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
 
 

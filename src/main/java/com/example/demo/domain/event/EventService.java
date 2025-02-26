@@ -2,6 +2,7 @@ package com.example.demo.domain.event;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserDetailsImpl;
+import com.example.demo.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.PageRequest;
@@ -25,12 +26,15 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private UserService userService;
+
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
-    public List<Event> getAllEvents (Integer size, Integer offset) {
+    public List<Event> getAllEvents(Integer size, Integer offset) {
         if (size < 1 || offset < 0) {
             throw new IllegalArgumentException("Invalid pagination details provided.");
         }
@@ -38,7 +42,7 @@ public class EventService {
         return eventRepository.findAll(request).toList();
     }
 
-    public List<User> getAllGuests (UUID eventId, Integer size, Integer offset) {
+    public List<User> getAllGuests(UUID eventId, Integer size, Integer offset) {
         if (size < 1 || offset < 0) {
             throw new IllegalArgumentException("Invalid pagination details provided.");
         }
@@ -58,6 +62,9 @@ public class EventService {
                 .getPrincipal();
         User user = userDetails.getUser();
         event.setEventCreator(user);
+        if(guestListContainsAdmin(event.getGuestList())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admins can't participate in events.");
+        }
 
         if (!isValidEvent(event)) {
             throw new IllegalArgumentException("Invalid event details provided.");
@@ -81,6 +88,10 @@ public class EventService {
         event.setEventName(newEvent.getEventName());
         event.setDate(newEvent.getDate());
         event.setLocation(newEvent.getLocation());
+
+        if(guestListContainsAdmin(newEvent.getGuestList())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admins can't participate in events.");
+        }
         event.setGuestList(newEvent.getGuestList());
 
         if (!isValidEvent(event)) {
@@ -97,6 +108,16 @@ public class EventService {
         } else {
             throw new NoSuchElementException(String.format("Event with ID '%s' could not be found", id));
         }
+    }
+
+    private boolean guestListContainsAdmin(Set<User> users) {
+        for (User guest : users) {
+            User fullGuest = userService.findById(guest.getId()); // Fetch full User object
+            if (fullGuest.getRoles().stream().anyMatch(role -> "ADMIN".equals(role.getName()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isValidEvent(Event event) {
