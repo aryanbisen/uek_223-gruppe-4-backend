@@ -1,0 +1,742 @@
+{
+	"info": {
+		"_postman_id": "7f49efa3-3a3a-43ff-b720-4ae37eebdc0b",
+		"name": "Component-testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33608081"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@example.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events as admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response contains three events\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.lengthOf(3);\r",
+									"});\r",
+									"// Extracting the \"id\" values from the response and asserting their presence\r",
+									"pm.test(\"Verify event ids\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var eventIds = jsonData.map(event => event.id);\r",
+									"    pm.expect(eventIds).to.include(\"550e8400-e29b-41d4-a716-446655440000\");\r",
+									"    pm.expect(eventIds).to.include(\"550e8400-e29b-41d4-a716-446655440001\");\r",
+									"    pm.expect(eventIds).to.include(\"550e8400-e29b-41d4-a716-446655440002\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiREVGQVVMVCJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfTU9ESUZZIn0seyJhdXRob3JpdHkiOiJFVkVOVF9DUkVBVEUifSx7ImF1dGhvcml0eSI6IlVTRVJfTU9ESUZZIn0seyJhdXRob3JpdHkiOiJFVkVOVF9ERUxFVEUifSx7ImF1dGhvcml0eSI6IkVWRU5UX1JFQUQifSx7ImF1dGhvcml0eSI6IkVWRU5UX01PRElGWSJ9LHsiYXV0aG9yaXR5IjoiVVNFUl9ERUxFVEUifSx7ImF1dGhvcml0eSI6IkVWRU5UX0NSRUFURSJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9SRUFEIn1dLCJzdWIiOiJiYTgwNGNiOS1mYTE0LTQyYTUtYWZhZi1iZTQ4ODc0MmZjNTQiLCJpYXQiOjE3NDA2NDI2NzMsImV4cCI6MTc0MDc0MjY3MywiaXNzIjoidWsyMjMifQ.y-my3_CDdXq79pdgC3tY2anC1t1f_nCaLgePiIElMhcdDFDATIqxq2gORNVcLm-r",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/event?size=10&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"usernew@example.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get event by id as user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(\"550e8400-e29b-41d4-a716-446655440000\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfQ1JFQVRFIn0seyJhdXRob3JpdHkiOiJVU0VSX0RFTEVURSJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9NT0RJRlkifSx7ImF1dGhvcml0eSI6IkVWRU5UX1JFQUQifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY0MjkyOCwiZXhwIjoxNzQwNzQyOTI4LCJpc3MiOiJ1azIyMyJ9.eYf3Dn9GU0XWgr_3XJSzZizZIsfWZq6WR7DT5fjygmOOG9nNKL5CnW2hjpn7l8vO",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/event/550e8400-e29b-41d4-a716-446655440000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event",
+								"550e8400-e29b-41d4-a716-446655440000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create event as user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response body matches the expected structure\", function () {\r",
+									"    const expectedResponse = { \r",
+									"        \"eventCreator\": { \r",
+									"            \"firstName\": \"Tri\", \r",
+									"            \"lastName\": \"Bro\", \r",
+									"            \"email\": \"usernew@example.com\" \r",
+									"        }, \r",
+									"        \"eventName\": \"Tech Hackathon\", \r",
+									"        \"date\": \"2025-08-10\", \r",
+									"        \"location\": \"Seattle\", \r",
+									"        \"guestList\": [ \r",
+									"            { \r",
+									"                \"firstName\": \"Tyler\", \r",
+									"                \"lastName\": \"Durden\", \r",
+									"                \"email\": \"default@example.com\" \r",
+									"            } \r",
+									"        ] \r",
+									"    };\r",
+									"    pm.response.to.have.jsonBody(expectedResponse);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response status is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfQ1JFQVRFIn0seyJhdXRob3JpdHkiOiJVU0VSX0RFTEVURSJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9NT0RJRlkifSx7ImF1dGhvcml0eSI6IkVWRU5UX1JFQUQifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY0MjkyOCwiZXhwIjoxNzQwNzQyOTI4LCJpc3MiOiJ1azIyMyJ9.eYf3Dn9GU0XWgr_3XJSzZizZIsfWZq6WR7DT5fjygmOOG9nNKL5CnW2hjpn7l8vO",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventName\": \"Tech Hackathon\",\r\n    \"date\": \"2025-08-10\",\r\n    \"location\": \"Seattle\",\r\n    \"guestList\": [\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992de\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/event",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get event with invalid id as user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify presence of errors field and element value in the response body\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('errors');\r",
+									"    pm.expect(pm.response.json().errors).to.eql({ \"element\": \"Element wurde nicht gefunden\" });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfQ1JFQVRFIn0seyJhdXRob3JpdHkiOiJVU0VSX0RFTEVURSJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9NT0RJRlkifSx7ImF1dGhvcml0eSI6IkVWRU5UX1JFQUQifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY0MjkyOCwiZXhwIjoxNzQwNzQyOTI4LCJpc3MiOiJ1azIyMyJ9.eYf3Dn9GU0XWgr_3XJSzZizZIsfWZq6WR7DT5fjygmOOG9nNKL5CnW2hjpn7l8vO",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/event/550e8400-e29b-41d4-a716-446655440068",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event",
+								"550e8400-e29b-41d4-a716-446655440068"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User tries to create event with admin in guest list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfUkVBRCJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9NT0RJRlkifSx7ImF1dGhvcml0eSI6IlVTRVJfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9DUkVBVEUifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY1MTk3MSwiZXhwIjoxNzQwNzUxOTcxLCJpc3MiOiJ1azIyMyJ9.n_6KxsbMFC0B-EOja1SjW15sY2XZzbWSiqjzIhEtD0SbweXesSBR7ZZsoVkJxPLM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventName\": \"Tech Hackathon\",\r\n    \"date\": \"2025-08-10\",\r\n    \"location\": \"Seattle\",\r\n    \"guestList\": [\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992de\"\r\n        },\r\n         {\r\n            \"id\": \"ba804cb9-fa14-42a5-afaf-be488742fc54\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/event",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update event as creator of event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Verify guestList contains specific users\", function () {\r",
+									"    var guestList = pm.response.json().guestList;\r",
+									"    \r",
+									"    // Define the expected users\r",
+									"    var expectedUsers = [\r",
+									"        {\r",
+									"            \"firstName\": \"Tri\",\r",
+									"            \"lastName\": \"Bro\",\r",
+									"            \"email\": \"usernew@example.com\"\r",
+									"        },\r",
+									"        {\r",
+									"            \"firstName\": \"Tyler\",\r",
+									"            \"lastName\": \"Durden\",\r",
+									"            \"email\": \"default@example.com\"\r",
+									"        }\r",
+									"    ];\r",
+									"    \r",
+									"    // Check if all expected users are present in the guestList\r",
+									"    expectedUsers.forEach(function(user) {\r",
+									"        pm.expect(guestList).to.deep.include(user);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJVU0VSX0RFTEVURSJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfUkVBRCJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfTU9ESUZZIn0seyJhdXRob3JpdHkiOiJFVkVOVF9DUkVBVEUifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY1MzEyNSwiZXhwIjoxNzQwNzUzMTI1LCJpc3MiOiJ1azIyMyJ9.OBWUmOgLn6yBbi0qMXAwcU3jXDm5p954xbuks5iXHEOF9T3mddgbdMHZp_KQ6sgq",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventName\": \"Updated Tech Hackathon\",\r\n    \"date\": \"2026-08-10\",\r\n    \"location\": \"New Seattle\",\r\n    \"guestList\": [\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992de\"\r\n        },\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992ff\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/event/550e8400-e29b-41d4-a716-446655440001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event",
+								"550e8400-e29b-41d4-a716-446655440001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Try adding admin to guest list as creator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfTU9ESUZZIn0seyJhdXRob3JpdHkiOiJVU0VSX0RFTEVURSJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfUkVBRCJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9DUkVBVEUifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY2NDg0NiwiZXhwIjoxNzQwNzY0ODQ2LCJpc3MiOiJ1azIyMyJ9.PH0K3xRQga_DFcP3X0oZZKWADqBurBUmQgDuwH71RpF3piyY1T13hd3I8WbbjqT3",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventName\": \"Updated Tech Hackathon\",\r\n    \"date\": \"2025-08-10\",\r\n    \"location\": \"Seattle\",\r\n    \"guestList\": [\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992de\"\r\n        },\r\n         {\r\n            \"id\": \"ba804cb9-fa14-42a5-afaf-be488742fc54\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/event/550e8400-e29b-41d4-a716-446655440001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event",
+								"550e8400-e29b-41d4-a716-446655440001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Try updating event guest list as not the creator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfTU9ESUZZIn0seyJhdXRob3JpdHkiOiJFVkVOVF9DUkVBVEUifSx7ImF1dGhvcml0eSI6IlVTRVJfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9SRUFEIn0seyJhdXRob3JpdHkiOiJFVkVOVF9ERUxFVEUifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY1NzUxNCwiZXhwIjoxNzQwNzU3NTE0LCJpc3MiOiJ1azIyMyJ9.2M2tAQDfeH9FGIX_3ME6KgjGcjuZqrC_uOoMOfEEgkRfyiE9nDaUDNHGPhJgT1cf",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventName\": \"Updated Tech Hackathon\",\r\n    \"date\": \"2025-08-10\",\r\n    \"location\": \"Seattleeeeeeeeeeeeeeeeeeee\",\r\n    \"guestList\": [\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992de\"\r\n        },\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992ff\"\r\n        }\r\n      \r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/event/550e8400-e29b-41d4-a716-446655440000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event",
+								"550e8400-e29b-41d4-a716-446655440000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a event as the creator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiRVZFTlRfTU9ESUZZIn0seyJhdXRob3JpdHkiOiJFVkVOVF9DUkVBVEUifSx7ImF1dGhvcml0eSI6IlVTRVJfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9SRUFEIn0seyJhdXRob3JpdHkiOiJFVkVOVF9ERUxFVEUifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY1NzUxNCwiZXhwIjoxNzQwNzU3NTE0LCJpc3MiOiJ1azIyMyJ9.2M2tAQDfeH9FGIX_3ME6KgjGcjuZqrC_uOoMOfEEgkRfyiE9nDaUDNHGPhJgT1cf",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/event/550e8400-e29b-41d4-a716-446655440001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event",
+								"550e8400-e29b-41d4-a716-446655440001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a event as not the creator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"// Extract response body as a string\r",
+									"let responseBody = pm.response.text();\r",
+									"\r",
+									"// Define the expected message\r",
+									"let expectedMessage = \"You are not the creator of this event. Can't delete events you don't own\";\r",
+									"\r",
+									"// Validate if the response body contains the expected message\r",
+									"pm.test(\"Response should contain the expected message\", function () {\r",
+									"    pm.expect(responseBody).to.include(expectedMessage);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiVVNFUl9ERUxFVEUifSx7ImF1dGhvcml0eSI6IkVWRU5UX1JFQUQifSx7ImF1dGhvcml0eSI6IkVWRU5UX0NSRUFURSJ9LHsiYXV0aG9yaXR5IjoiRVZFTlRfREVMRVRFIn0seyJhdXRob3JpdHkiOiJFVkVOVF9NT0RJRlkifV0sInN1YiI6IjBkOGZhNDRjLTU0ZmQtNGNkMC1hY2U5LTJhN2RhNTc5OTJmZiIsImlhdCI6MTc0MDY1NDQxNCwiZXhwIjoxNzQwNzU0NDE0LCJpc3MiOiJ1azIyMyJ9.Gaa9mw6v54eLI1L6Pg391GMGPpj-HQHTKf52S9rpSQVPhYaBMa5cHDSwJK2_8HuK",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/event/550e8400-e29b-41d4-a716-446655440000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event",
+								"550e8400-e29b-41d4-a716-446655440000"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "NO JWT",
+			"item": [
+				{
+					"name": "Get all events with no JWT",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/event?size=10&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create event with no JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventName\": \"Tech Hackathon\",\r\n    \"date\": \"2025-08-10\",\r\n    \"location\": \"Seattle\",\r\n    \"guestList\": [\r\n        {\r\n            \"id\": \"0d8fa44c-54fd-4cd0-ace9-2a7da57992de\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/event",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
