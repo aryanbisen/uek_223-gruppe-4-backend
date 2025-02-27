@@ -52,7 +52,7 @@ VALUES ('d29e709c-0ff1-4f4c-a7ef-09f656c390f1', '2ebf301e-6c61-4076-98e3-2a38b31
 INSERT INTO events (id, event_creator, event_name, date, location)
 VALUES ('550e8400-e29b-41d4-a716-446655440000', 'ba804cb9-fa14-42a5-afaf-be488742fc54', 'Spring Boot Conference',
         '2025-06-15', 'New York'),
-       ('550e8400-e29b-41d4-a716-446655440001', 'ba804cb9-fa14-42a5-afaf-be488742fc54', 'Java Dev Meetup', '2025-07-20',
+       ('550e8400-e29b-41d4-a716-446655440001', '0d8fa44c-54fd-4cd0-ace9-2a7da57992ff', 'Java Dev Meetup', '2025-07-20',
         'San Francisco'),
        ('550e8400-e29b-41d4-a716-446655440002', 'ba804cb9-fa14-42a5-afaf-be488742fc54', ' Tech Hackathon', '2025-08-10',
         'Seattle');
