@@ -39,6 +39,15 @@ public class EventService {
         return eventRepository.findAll(request).toList(); // Fetch events based on pagination.
     }
 
+    public List<Event> getAllEventsWithEventCreator(UUID id, Integer size, Integer offset) {
+        // Ensure pagination values are valid
+        if (size < 1 || offset < 0) {
+            throw new IllegalArgumentException("Invalid pagination details provided.");
+        }
+        PageRequest request = PageRequest.of(offset, size);
+        return eventRepository.findByEventCreator_Id(id, request).toList(); // Fetch events based on event creator and pagination
+    }
+
     // Method to retrieve a list of guests for a specific event with pagination
     public List<User> getAllGuests(UUID eventId, Integer size, Integer offset) {
         if (size < 1 || offset < 0) {

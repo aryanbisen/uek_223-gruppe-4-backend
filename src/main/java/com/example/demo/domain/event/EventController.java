@@ -54,6 +54,23 @@ public class EventController {
     }
 
     /**
+     * Retrieves all events with pagination.
+     *
+     * @param id
+     * @param size   Number of events per page.
+     * @param offset Starting index for pagination.
+     * @return ResponseEntity containing a list of EventDTO objects.
+     */
+    @GetMapping({"creator/{id}", "/creator/{id}"})
+    @PreAuthorize("hasAuthority('EVENT_READ')")
+    public ResponseEntity<List<EventDTO>> getAllEventsWithEventCreator(@PathVariable("id") UUID id,
+                                                                       @RequestParam("size") Integer size,
+                                                                       @RequestParam("offset") Integer offset) {
+        List<Event> events = eventService.getAllEventsWithEventCreator(id, size, offset);
+        return new ResponseEntity<>(eventMapper.toDTOs(events), HttpStatus.OK);
+    }
+
+    /**
      * Retrieves all guests of a specific event with pagination.
      *
      * @param id     UUID of the event.
