@@ -32,9 +32,9 @@ public class Event extends AbstractEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "events_guests", // TODO: naming?
-            joinColumns = @JoinColumn(name = "events_id", referencedColumnName = "id"), // Event id
-            inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id") // User id
+            name = "events_guests",
+            joinColumns = @JoinColumn(name = "events_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id")
     )
     private Set<User> guestList = new HashSet<>();
 
