@@ -30,24 +30,22 @@ public class EventService {
     private UserService userService;
 
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
-    }
-
     public List<Event> getAllEvents(Integer size, Integer offset) {
+        // Ensure pagination values are valid
         if (size < 1 || offset < 0) {
             throw new IllegalArgumentException("Invalid pagination details provided.");
         }
         PageRequest request = PageRequest.of(offset, size);
-        return eventRepository.findAll(request).toList();
+        return eventRepository.findAll(request).toList(); // Fetch events based on pagination.
     }
 
+    // Method to retrieve a list of guests for a specific event with pagination
     public List<User> getAllGuests(UUID eventId, Integer size, Integer offset) {
         if (size < 1 || offset < 0) {
             throw new IllegalArgumentException("Invalid pagination details provided.");
         }
         Event event = eventRepository.findById(eventId).orElseThrow(NoSuchElementException::new);
-        List<User> guests = event.getGuestList().stream().toList();
+        List<User> guests = event.getGuestList().stream().toList();  // Convert guest list to a list
         return guests.subList(offset * size, (offset * size) + size);
     }
 
@@ -57,7 +55,7 @@ public class EventService {
 
     @Transactional
     public Event createEvent(Event event) {
-
+        // Retrieve the currently authenticated user
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         User user = userDetails.getUser();
@@ -76,24 +74,30 @@ public class EventService {
 
     @Transactional
     public Event updateEvent(Event newEvent) {
+        // Fetch existing event by ID
         Event event = getEvent(newEvent.getId());
+        // Retrieve the currently authenticated user
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         User user = userDetails.getUser();
 
+        // Ensure that the authenticated user is the creator of the event
         if (!(user.getId()).equals(event.getEventCreator().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the creator of this event. Can't " +
                     "update events you don't own");
         }
+        // Update event details with new data
         event.setEventName(newEvent.getEventName());
         event.setDate(newEvent.getDate());
         event.setLocation(newEvent.getLocation());
 
+        // Validate if the guest list contains an admin
         if(guestListContainsAdmin(newEvent.getGuestList())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admins can't participate in events.");
         }
         event.setGuestList(newEvent.getGuestList());
 
+        // Validate event details again before saving
         if (!isValidEvent(event)) {
             throw new IllegalArgumentException("Invalid event details provided.");
         }
@@ -102,12 +106,16 @@ public class EventService {
     }
 
 
+    @Transactional
     public void deleteEventById(UUID id) throws NoSuchElementException {
+        // Fetch existing event by ID
         Event event = getEvent(id);
+        // Retrieve the currently authenticated user
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         User user = userDetails.getUser();
 
+        // Ensure the user is the creator of the event before allowing deletion
         if (!(user.getId()).equals(event.getEventCreator().getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the creator of this event. Can't " +
                     "delete events you don't own");
@@ -119,6 +127,7 @@ public class EventService {
         }
     }
 
+    // Helper method to check if any guest in the event is an admin
     private boolean guestListContainsAdmin(Set<User> users) {
         for (User guest : users) {
             User fullGuest = userService.findById(guest.getId()); // Fetch full User object
@@ -129,6 +138,7 @@ public class EventService {
         return false;
     }
 
+    // Helper method to validate event details.
     private boolean isValidEvent(Event event) {
         if (event == null) {
             return false;

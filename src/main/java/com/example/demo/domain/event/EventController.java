@@ -38,6 +38,13 @@ public class EventController {
         this.userMapper = userMapper;
     }
 
+    /**
+     * Retrieves all events with pagination.
+     *
+     * @param size   Number of events per page.
+     * @param offset Starting index for pagination.
+     * @return ResponseEntity containing a list of EventDTO objects.
+     */
     @GetMapping({"", "/"})
     @PreAuthorize("hasAuthority('EVENT_READ')")
     public ResponseEntity<List<EventDTO>> getAllEvents(@RequestParam("size") Integer size,
@@ -46,6 +53,14 @@ public class EventController {
         return new ResponseEntity<>(eventMapper.toDTOs(events), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves all guests of a specific event with pagination.
+     *
+     * @param id     UUID of the event.
+     * @param size   Number of guests per page.
+     * @param offset Starting index for pagination.
+     * @return ResponseEntity containing a list of UserDTO objects.
+     */
     @GetMapping({"{id}/guests/", "/{id}/guests/"})
     @PreAuthorize("hasAuthority('EVENT_READ')")
     public ResponseEntity<List<UserDTO>> getAllGuests(@PathVariable("id") UUID id,
@@ -55,13 +70,24 @@ public class EventController {
         return new ResponseEntity<>(userMapper.toDTOs(guests), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a specific event by its ID.
+     *
+     * @param id UUID of the event.
+     * @return ResponseEntity containing the EventDTO object.
+     */
     @GetMapping({"{id}", "/{id}"})
     @PreAuthorize("hasAuthority('EVENT_READ')")
     public ResponseEntity<EventDTO> getEvent(@PathVariable("id") UUID id) {
         Event event = eventService.getEvent(id);
         return new ResponseEntity<>(eventMapper.toDTO(event), HttpStatus.OK);
     }
-
+    /**
+     * Creates a new event.
+     *
+     * @param eventDto Data transfer object containing event details.
+     * @return ResponseEntity containing the created EventDTO object.
+     */
     @PostMapping({"", "/"})
     @PreAuthorize("hasAuthority('EVENT_CREATE')")
     public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody CreateEventDTO eventDto) {
@@ -77,7 +103,13 @@ public class EventController {
         return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
     }
 
-
+    /**
+     * Updates an existing event.
+     *
+     * @param eventDto Data transfer object containing updated event details.
+     * @param id       UUID of the event to update.
+     * @return ResponseEntity containing the updated EventDTO object.
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EVENT_MODIFY')")
     public ResponseEntity<EventDTO> updateEvent(@RequestBody CreateEventDTO eventDto, @PathVariable("id") UUID id) {
