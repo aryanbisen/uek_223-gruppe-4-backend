@@ -31,3 +31,9 @@ org.postgresql.util.PSQLException: ERROR: relation "role_authority" does not exi
 Simply restart the application.
 Hibernate sometimes does not initialize the tables fast enough and causes this error.
 Restarting the application fixes this.
+
+## Testing
+The JSON file for Postman component tests can be found in the file Component-testing.postman_colletion.json.
+
+There are three folders. Admin, User and no JWT
+In the beginning of Admin folder and User folder there's a login request with the according email and password in request. The JWT that you get, should be used in the file as authorization.
