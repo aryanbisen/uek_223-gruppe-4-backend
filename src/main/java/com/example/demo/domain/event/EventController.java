@@ -39,6 +39,7 @@ public class EventController {
     }
 
     @GetMapping({"", "/"})
+    @PreAuthorize("hasAuthority('EVENT_READ')")
     public ResponseEntity<List<EventDTO>> getAllEvents(@RequestParam("size") Integer size,
                                                        @RequestParam("offset") Integer offset) {
         List<Event> events = eventService.getAllEvents(size, offset);
@@ -46,6 +47,7 @@ public class EventController {
     }
 
     @GetMapping({"{id}/guests/", "/{id}/guests/"})
+    @PreAuthorize("hasAuthority('EVENT_READ')")
     public ResponseEntity<List<UserDTO>> getAllGuests(@PathVariable("id") UUID id,
                                                       @RequestParam("size") Integer size,
                                                       @RequestParam("offset") Integer offset) {
@@ -54,12 +56,14 @@ public class EventController {
     }
 
     @GetMapping({"{id}", "/{id}"})
+    @PreAuthorize("hasAuthority('EVENT_READ')")
     public ResponseEntity<EventDTO> getEvent(@PathVariable("id") UUID id) {
         Event event = eventService.getEvent(id);
         return new ResponseEntity<>(eventMapper.toDTO(event), HttpStatus.OK);
     }
 
     @PostMapping({"", "/"})
+    @PreAuthorize("hasAuthority('EVENT_CREATE')")
     public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody CreateEventDTO eventDto) {
         Event event = eventMapper.fromCreateEventDTO(eventDto);
         Set<User> guestList = userService.getUsersById(eventDto.getGuestList());
