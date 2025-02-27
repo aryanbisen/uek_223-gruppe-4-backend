@@ -52,10 +52,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
     return specialChars.mapToObj(data -> (char) data);
   }
 
-  public User getUserByEmail(String email) {
-    return userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User with email " + email + " not found"));
-  }
+
   public Set<User> getUsersById(Set<UserIdDTO> dtos) {
     Set<UUID> userIds = dtos.stream()
             .map(UserIdDTO::getId)

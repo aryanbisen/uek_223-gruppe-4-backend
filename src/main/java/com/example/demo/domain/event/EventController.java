@@ -169,11 +169,17 @@ public class EventController {
      */
     @DeleteMapping({"{id}", "/{id}"})
     @PreAuthorize("hasAuthority('EVENT_DELETE')")
-    public ResponseEntity<Void> deleteEventById(@PathVariable("id") UUID id) {
+    public ResponseEntity<String> deleteEventById(@PathVariable("id") UUID id) {
         log.info("Deleting event with id: {}", id);
-        eventService.deleteEventById(id);
+        try {
+            eventService.deleteEventById(id);
+        } catch (ResponseStatusException responseStatusException){
+            return new ResponseEntity<>("You are not the creator of this event. Can't delete events you don't own",
+                    HttpStatus.FORBIDDEN);
+        }
+
         log.info("Event with id: {} deleted successfully.", id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
     }
 
 }

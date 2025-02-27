@@ -81,6 +81,7 @@ public class EventService {
         });
     }
 
+    // Method to create a new event (Transactional ensures database consistency)
     @Transactional
     public Event createEvent(Event event) {
         log.info("Creating event: {}", event);
@@ -107,6 +108,7 @@ public class EventService {
         return savedEvent;
     }
 
+    // Method to update an existing event (Transactional ensures database consistency)
     @Transactional
     public Event updateEvent(Event newEvent) {
         log.info("Updating event with ID: {} with new details: {}", newEvent.getId(), newEvent);
@@ -148,6 +150,7 @@ public class EventService {
         return savedEvent;
     }
 
+    // Method to delete an event by its ID (Transactional ensures database consistency)
     @Transactional
     public void deleteEventById(UUID id) {
         log.info("Deleting event with ID: {}", id);
