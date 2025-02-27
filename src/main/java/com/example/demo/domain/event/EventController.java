@@ -99,6 +99,12 @@ public class EventController {
         return new ResponseEntity<>(eventMapper.toDTO(savedEvent), HttpStatus.CREATED);
     }
 
+    /**
+     * Deletes an event by its ID.
+     *
+     * @param id UUID of the event to delete.
+     * @return ResponseEntity with no content.
+     */
     @DeleteMapping({"{id}", "/{id}"})
     @PreAuthorize("hasAuthority('EVENT_DELETE')")
     public ResponseEntity<Void> deleteEventById(@PathVariable("id") UUID id) {

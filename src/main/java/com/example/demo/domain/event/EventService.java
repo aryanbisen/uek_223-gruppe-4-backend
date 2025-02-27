@@ -103,6 +103,15 @@ public class EventService {
 
 
     public void deleteEventById(UUID id) throws NoSuchElementException {
+        Event event = getEvent(id);
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User user = userDetails.getUser();
+
+        if (!(user.getId()).equals(event.getEventCreator().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not the creator of this event. Can't " +
+                    "delete events you don't own");
+        }
         if (eventRepository.existsById(id)) {
             eventRepository.deleteById(id);
         } else {
