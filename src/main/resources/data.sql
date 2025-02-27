@@ -59,8 +59,8 @@ VALUES ('550e8400-e29b-41d4-a716-446655440000', 'ba804cb9-fa14-42a5-afaf-be48874
 
 INSERT INTO events_guests (events_id, users_id)
 VALUES ('550e8400-e29b-41d4-a716-446655440000',
-        'ba804cb9-fa14-42a5-afaf-be488742fc54'),                                         -- James at Spring Boot                                      -- John at Spring Boot Conference
-       ('550e8400-e29b-41d4-a716-446655440001', 'ba804cb9-fa14-42a5-afaf-be488742fc54'), -- James at Java Dev Meetup
+        '0d8fa44c-54fd-4cd0-ace9-2a7da57992de'),                                         -- Tyler at Spring Boot                                      -- John at Spring Boot Conference
+       ('550e8400-e29b-41d4-a716-446655440001', '0d8fa44c-54fd-4cd0-ace9-2a7da57992ff'), -- Tri at Java Dev Meetup
        ('550e8400-e29b-41d4-a716-446655440001', '0d8fa44c-54fd-4cd0-ace9-2a7da57992de'), -- Tyler at Java Dev Meetup
        ('550e8400-e29b-41d4-a716-446655440002', '0d8fa44c-54fd-4cd0-ace9-2a7da57992de'); -- Tyler at Tech Hackathon
 
